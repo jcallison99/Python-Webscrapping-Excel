@@ -54,7 +54,7 @@ def save_excel_file():
     filename = "1000Names.xlsx"
     # Save the Excel file
     save_names_to_excel().save(filename)
-    print(f"Saved {len(get_names())} names to {filename}")
+
 
 def scrape_names_to_excel():
     #Call get_names function to scrape 
@@ -69,9 +69,6 @@ def scrape_names_to_excel():
     #Call the save_excel_file() function
     #to save excel file
     save_excel_file()
-
-
-
 
 
 def get_random_name_from_excel():
@@ -91,8 +88,10 @@ def get_random_name_from_excel():
     
     return random_name
 
+
 def choose_word():
     return get_random_name_from_excel().lower()
+
 
 def display_word(word, guessed_letters):
     return " ".join([letter if letter in guessed_letters else "_" for letter in word])
@@ -100,12 +99,14 @@ def display_word(word, guessed_letters):
 
 def guessed_letters():""
 
-def hangman():
+
+def hangman(attempts):
     guessed_letters = set()
-    attempts_remaining = 5
-    while attempts_remaining > 0:
-        print("\nWord to guess:", display_word(choose_word(), guessed_letters))
-        print("Attempts remaining:", attempts_remaining)
+    name_to_guess = choose_word()
+
+    while attempts > 0:
+        print("\nWord to guess:", display_word(name_to_guess, guessed_letters))
+        print("Attempts remaining:", attempts)
         print("Guessed letters:", " ".join(sorted(guessed_letters)))
 
         guess = input("Enter a letter: ").lower()
@@ -120,19 +121,23 @@ def hangman():
 
         guessed_letters.add(guess)
 
-        if guess in choose_word():
+        if guess in name_to_guess:
             print("Good guess!")
-            if all(letter in guessed_letters for letter in choose_word()):
-                print("\nCongratulations! You guessed the word:", choose_word())
+            if all(letter in guessed_letters for letter in name_to_guess):
+                print("\nCongratulations! You guessed the word:", name_to_guess)
                 break
         else:
             print("Wrong guess.")
-            attempts_remaining -= 1
+            attempts -= 1
     else:
-        print("\nGame over! The word was:", choose_word())
+        print("\nGame over! The word was:", name_to_guess)
 
 
 #kinda like main function
 if __name__ == "__main__":
+    ATTEMPTS_REMAINING = 5
     #Call scrape_names_to_excel()
     scrape_names_to_excel()
+
+    #Call hangman function to play game
+    hangman(ATTEMPTS_REMAINING)
